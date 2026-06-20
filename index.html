@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="hero">
+    <h1>Find Jobs That Match Your Resume</h1>
+
+    <p>
+        Upload your PDF resume. The system extracts your skills,
+        scrapes real Nepali job listings, stores them in SQLite,
+        and recommends jobs with match percentages.
+    </p>
+
+    <div class="hero-buttons">
+        <a href="{{ url_for('register') }}">
+            <button>Get Started</button>
+        </a>
+
+        <a href="{{ url_for('login') }}">
+            <button class="secondary">Login</button>
+        </a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-card">
+        <h3>Resume Parser</h3>
+        <p>Reads PDF resumes and extracts skills.</p>
+    </div>
+
+    <div class="feature-card">
+        <h3>Dynamic Scraper</h3>
+        <p>Uses BeautifulSoup to collect jobs from JobsNepal.</p>
+    </div>
+
+    <div class="feature-card">
+        <h3>Smart Matching</h3>
+        <p>Calculates job match percentage from user skills.</p>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="results-header">
+    <h1>Your Job Recommendations</h1>
+
+    <p>
+        Resume:
+        <strong>{{ filename }}</strong>
+    </p>
+
+    <p>
+        Scraper:
+        {{ scrape_result.message }}
+    </p>
+</div>
+
+<div class="section-card">
+    <h2>Detected Skills</h2>
+
+    {% if skills %}
+        <div class="skill-list">
+            {% for skill in skills %}
+                <span class="skill">{{ skill }}</span>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No skills detected. Please upload a clearer PDF resume with a skills section.</p>
+    {% endif %}
+</div>
+
+<div class="section-card">
+    <h2>Top Matching Jobs</h2>
+
+    {% if jobs %}
+
+        {% for job in jobs %}
+
+            <div class="job-card">
+                <div class="job-card-header">
+                    <div>
+                        <h3>{{ job.title }}</h3>
+                        <p>{{ job.company }}</p>
+                    </div>
+
+                    <div class="score-circle">
+                        {{ job.score }}%
+                    </div>
+                </div>
+
+                <p>
+                    <strong>Location:</strong>
+                    {{ job.location }}
+                </p>
+
+                <p>
+                    <strong>Required Skills:</strong>
+                    {{ job.skills }}
+                </p>
+
+                <p>
+                    <strong>Matched Skills:</strong>
+
+                    {% if job.matched_skills %}
+                        {{ job.matched_skills | join(", ") }}
+                    {% else %}
+                        No direct skill match
+                    {% endif %}
+                </p>
+
+                <progress class="match-progress" value="{{ job.score }}" max="100"></progress>
+
+                <br><br>
+
+                <a href="{{ job.link }}" target="_blank">
+                    <button>Apply Now</button>
+                </a>
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No matching jobs found.</p>
+
+    {% endif %}
+</div>
+
+<a href="{{ url_for('dashboard') }}">
+    <button class="secondary">Back to Dashboard</button>
+</a>
+
+{% endblock %}

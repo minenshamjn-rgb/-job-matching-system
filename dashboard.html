@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <h1>Welcome, {{ current_user.name }}</h1>
+    <p>Upload your PDF resume to get personalized job recommendations.</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h2>{{ stats.total_jobs }}</h2>
+        <p>Jobs in Database</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>{{ stats.total_resumes }}</h2>
+        <p>Your Uploaded Resumes</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>{{ stats.total_recommendations }}</h2>
+        <p>Your Saved Recommendations</p>
+    </div>
+</div>
+
+<div class="main-grid">
+
+    <div class="upload-card">
+        <h2>Upload Resume</h2>
+
+        <form action="{{ url_for('upload_resume') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="resume" accept=".pdf" required>
+
+            <button type="submit">
+                Find Matching Jobs
+            </button>
+        </form>
+
+        <p class="note">
+            Only PDF resumes are accepted.
+        </p>
+    </div>
+
+    <div class="scrape-card">
+        <h2>Refresh Job Database</h2>
+
+        <p>
+            This dynamically scrapes jobs from JobsNepal and updates SQLite.
+        </p>
+
+        <form action="{{ url_for('refresh_jobs') }}" method="POST">
+            <button type="submit" class="secondary">
+                Scrape Jobs Now
+            </button>
+        </form>
+    </div>
+
+</div>
+
+<h2>Latest Jobs Stored</h2>
+
+<div class="jobs-grid">
+    {% for job in jobs %}
+        <div class="small-job-card">
+            <h3>{{ job.title }}</h3>
+            <p>{{ job.company }}</p>
+            <p>{{ job.location }}</p>
+            <p class="tiny">{{ job.skills }}</p>
+        </div>
+    {% else %}
+        <p>No jobs yet. Click “Scrape Jobs Now”.</p>
+    {% endfor %}
+</div>
+
+{% if recommendations %}
+    <h2>Your Previous Recommendations</h2>
+
+    <div class="jobs-grid">
+        {% for rec in recommendations[:3] %}
+            <div class="small-job-card">
+                <h3>{{ rec.title }}</h3>
+                <p>{{ rec.company }}</p>
+                <p><strong>{{ rec.score }}%</strong> match</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}
